@@ -1,0 +1,310 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Fetal Health Prediction
+{% endblock %}
+
+{% block content %}
+<h1>Fetal Health Prediction</h1>
+
+<style>
+    .styled-form {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 25px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #444444;
+        letter-spacing: 0.5px;
+    }
+
+    .form-group input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #d1d1d1;
+        border-radius: 6px;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        background-color: #fafafa;
+        color: #333333;
+        font-size: 14px;
+    }
+
+    .form-group input[type="text"]:focus {
+        border-color: #007bff;
+        background-color: #ffffff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    .form-group input[type="text"]::placeholder {
+        color: #999999;
+        font-size: 13px;
+    }
+
+    .submit-button {
+        grid-column: span 4;
+        padding: 12px;
+        margin-top: 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .submit-button:hover {
+        background-color: #218838;
+        transform: translateY(-3px);
+    }
+
+    .submit-button:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 1024px) {
+        .form-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .submit-button {
+            grid-column: span 2;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .submit-button {
+            grid-column: span 1;
+        }
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1000; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.5); /* Slightly darker black w/ opacity */
+        transition: opacity 0.3s ease;
+    }
+
+    .modal-content {
+        background-color: #ffffff;
+        margin: 10% auto; /* 10% from the top and centered */
+        padding: 25px;
+        border: none;
+        width: 80%;
+        max-width: 600px; /* Limit maximum width */
+        border-radius: 8px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .close {
+        color: #555;
+        float: right;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        .modal-content {
+            width: 90%;
+            padding: 15px;
+        }
+    }
+</style>
+
+<form method="POST" class="styled-form">
+    <div class="form-grid">
+        <div class="form-group">
+            <label for="BaselineValue">Baseline Value:</label>
+            <input type="text" id="BaselineValue" name="BaselineValue" placeholder="Enter baseline value" required>
+        </div>
+
+        <div class="form-group">
+            <label for="Accelerations">Accelerations:</label>
+            <input type="text" id="Accelerations" name="Accelerations" placeholder="Enter accelerations" required>
+        </div>
+
+        <div class="form-group">
+            <label for="FetalMovement">Fetal Movement:</label>
+            <input type="text" id="FetalMovement" name="FetalMovement" placeholder="Enter fetal movement" required>
+        </div>
+
+        <div class="form-group">
+            <label for="UterineContractions">Uterine Contractions:</label>
+            <input type="text" id="UterineContractions" name="UterineContractions" placeholder="Enter uterine contractions" required>
+        </div>
+
+        <div class="form-group">
+            <label for="LightDecelerations">Light Decelerations:</label>
+            <input type="text" id="LightDecelerations" name="LightDecelerations" placeholder="Enter light decelerations" required>
+        </div>
+
+        <div class="form-group">
+            <label for="SevereDecelerations">Severe Decelerations:</label>
+            <input type="text" id="SevereDecelerations" name="SevereDecelerations" placeholder="Enter severe decelerations" required>
+        </div>
+
+        <div class="form-group">
+            <label for="ProlonguedDecelerations">Prolongued Decelerations:</label>
+            <input type="text" id="ProlonguedDecelerations" name="ProlonguedDecelerations" placeholder="Enter prolonged decelerations" required>
+        </div>
+
+        <div class="form-group">
+            <label for="AbnormalShortTermVariability">Abnormal Short Term Variability:</label>
+            <input type="text" id="AbnormalShortTermVariability" name="AbnormalShortTermVariability" placeholder="Enter abnormal short term variability" required>
+        </div>
+
+        <div class="form-group">
+            <label for="MeanValueOfShortTermVariability">Mean Value of Short Term Variability:</label>
+            <input type="text" id="MeanValueOfShortTermVariability" name="MeanValueOfShortTermVariability" placeholder="Enter mean value of short term variability" required>
+        </div>
+
+        <div class="form-group">
+            <label for="PercentageOfTimeWithAbnormalLongTermVariability">Percentage of Time with Abnormal Long Term Variability:</label>
+            <input type="text" id="PercentageOfTimeWithAbnormalLongTermVariability" name="PercentageOfTimeWithAbnormalLongTermVariability" placeholder="Enter percentage of time with abnormal long term variability" required>
+        </div>
+
+        <div class="form-group">
+            <label for="MeanValueOfLongTermVariability">Mean Value of Long Term Variability:</label>
+            <input type="text" id="MeanValueOfLongTermVariability" name="MeanValueOfLongTermVariability" placeholder="Enter mean value of long term variability" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HistogramWidth">Histogram Width:</label>
+            <input type="text" id="HistogramWidth" name="HistogramWidth" placeholder="Enter histogram width" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HistogramMin">Histogram Min:</label>
+            <input type="text" id="HistogramMin" name="HistogramMin" placeholder="Enter histogram min" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HistogramMax">Histogram Max:</label>
+            <input type="text" id="HistogramMax" name="HistogramMax" placeholder="Enter histogram max" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HistogramNumberOfPeaks">Histogram Number of Peaks:</label>
+            <input type="text" id="HistogramNumberOfPeaks" name="HistogramNumberOfPeaks" placeholder="Enter histogram number of peaks" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HistogramNumberOfZeroes">Histogram Number of Zeroes:</label>
+            <input type="text" id="HistogramNumberOfZeroes" name="HistogramNumberOfZeroes" placeholder="Enter histogram number of zeroes" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HistogramMode">Histogram Mode:</label>
+            <input type="text" id="HistogramMode" name="HistogramMode" placeholder="Enter histogram mode" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HistogramMean">Histogram Mean:</label>
+            <input type="text" id="HistogramMean" name="HistogramMean" placeholder="Enter histogram mean" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HistogramMedian">Histogram Median:</label>
+            <input type="text" id="HistogramMedian" name="HistogramMedian" placeholder="Enter histogram median" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HistogramVariance">Histogram Variance:</label>
+            <input type="text" id="HistogramVariance" name="HistogramVariance" placeholder="Enter histogram variance" required>
+        </div>
+
+        <div class="form-group">
+            <label for="HistogramTendency">Histogram Tendency:</label>
+            <input type="text" id="HistogramTendency" name="HistogramTendency" placeholder="Enter histogram tendency" required>
+        </div>
+    </div>
+    <button type="submit" class="submit-button">Predict</button>
+</form>
+
+<!-- Modal for displaying prediction -->
+<div id="resultModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="resultMessage" style="color: {{ color }};"></h2>
+    </div>
+</div>
+
+<script>
+    // JavaScript to handle modal display
+    function showModal(message) {
+        var modal = document.getElementById("resultModal");
+        var resultMessage = document.getElementById("resultMessage");
+        resultMessage.innerHTML = message;
+        modal.style.display = "block";
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("resultModal");
+        modal.style.display = "none";
+    }
+
+    // Show modal if there's a prediction
+    {% if prediction %}
+        document.addEventListener('DOMContentLoaded', function() {
+            showModal("{{ prediction }}");
+        });
+    {% endif %}
+</script>
+
+{% if error %}
+    <p style="color: red;">{{ error }}</p>
+{% endif %}
+{% endblock %}

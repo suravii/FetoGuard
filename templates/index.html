@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+
+{% block title %}About Us - FetoGuard{% endblock %}
+<link href="https://fonts.googleapis.com/css2?family=Abel&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+{% block content %}
+<style>
+    #about {
+        font-family: "Montserrat", sans-serif;
+        color: #333;
+        padding: 0 90px 0 90px;
+        background-color: #fff;
+    }
+    
+    #about h1 {
+        font-size: 2.5em;
+        color: black;
+        text-align: left;
+        margin-bottom: 20px;
+        margin-top:17px;
+    }
+    
+    #about p {
+        font-size: 1.2em;
+        line-height: 1.6;
+        text-align: justify;
+        margin-bottom: 20px;
+    }
+      
+    .features-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .feature {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 1200px;
+        margin: 10px;
+        padding: 0 20px 0 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        /*box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+    }
+    
+    .feature div {
+        flex: 1;
+        padding: 10px;
+    }
+    
+    .feature img {
+        max-width: 35%;
+        height: auto;
+        border-radius: 8px;
+        margin: 5px 40px 0px 0px;
+    }
+
+    .feature h2 {
+        font-size: 1.8em;
+        color: #333;
+        margin:0;
+    }
+    
+    .feature p {
+        font-size: 1em;
+        color: #666;
+        text-align: justify;
+    }
+    
+    @media (max-width: 768px) {
+        .feature {
+            flex-direction: column;
+            width: 100%;
+        }
+    
+        .feature img {
+            max-width: 100%;
+            margin: 0 0 10px 0;
+        }
+    }
+    
+</style>
+<section id="about" class="about">
+    <h1>Welcome to FetoGuard</h1>
+    <p>At FetoGuard, our mission is to revolutionize healthcare by offering innovative solutions through predictive analysis. Our platform is specifically designed to address the intricate aspects of maternal and fetal health, providing accurate predictions and proactive risk management.</p>
+
+    <div class="features-container">
+        <div class="feature">
+            <img src="{{ url_for('static', filename='imgs/signin.png') }}" alt="Fetal Health Prediction" class="feature-image1">
+            <div>
+                <h2>Fetal Wellbeing Insight</h2>
+                <p>Fetal Health Prediction is a crucial aspect of our system. We leverage cutting-edge technology to assess the health status of the fetus. Through a comprehensive analysis of factors such as ultrasound data, maternal health, and genetic factors, we deliver insights into the well-being of the unborn child.</p>
+            </div>
+        </div>
+        <div class="feature">
+            <div>
+                <h2>Pregnancy Risk Analyzer</h2>
+                <p>Our Pregnancy Risk Prediction feature utilizes advanced algorithms to analyze various parameters, including age, body sugar levels, blood pressure, and more. By processing this information, we provide accurate predictions of potential risks during pregnancy.</p>
+            </div>
+            <img src="{{ url_for('static', filename='imgs/fetus2.png') }}" alt="Pregnancy Risk Prediction" class="feature-image1">
+        </div>
+
+    </div>
+
+  <p><center>Thank you for choosing FetoGuard. We are committed to advancing healthcare through technology and predictive analytics. Feel free to explore our features and take advantage of the insights we provide.</center></p>
+</section>
+
+{% endblock %}
